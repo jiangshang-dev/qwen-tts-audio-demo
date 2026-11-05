@@ -1,0 +1,10 @@
+server:
+  port: 8090
+
+qwen:
+  tts:
+    url: http://127.0.0.1:9000
+    model: /Users/xiaobai/.lmstudio/models/mlx-community/Qwen3-TTS-12Hz-1.7B-CustomVoice-8bit
+    voice: Vivian
+
+# mlx_audio.server --host 0.0.0.0 --port 9000
