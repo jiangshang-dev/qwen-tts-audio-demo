@@ -37,6 +37,13 @@ public final class TextToSpeech {
      * 调用本机 mlx_audio.server 的 OpenAI 兼容接口，返回 WAV。本机没有 ffmpeg，不能编码 MP3
      */
     public static byte[] synthesizeLocal(String baseUrl, String model, String voice, String text) {
+        return synthesizeLocal(baseUrl, model, voice, text, null);
+    }
+
+    /**
+     * @param instruct 语气提示词，例如「用专业、沉稳的语气朗读」。为空则按音色默认语气。
+     */
+    public static byte[] synthesizeLocal(String baseUrl, String model, String voice, String text, String instruct) {
         if (baseUrl == null || baseUrl.isBlank()) {
             throw new IllegalArgumentException("本地语音服务地址不能为空");
         }
@@ -56,6 +63,9 @@ public final class TextToSpeech {
         body.put("input", text.trim());
         body.put("voice", voice.trim());
         body.put("response_format", "wav");
+        if (instruct != null && !instruct.isBlank()) {
+            body.put("instruct", instruct.trim());
+        }
         byte[] json = body.toString().getBytes(StandardCharsets.UTF_8);
 
         // mlx-audio 是 HTTP/1.1 服务。Java 默认协商 HTTP/2 时，对方收不到 JSON 正文。

@@ -29,11 +29,13 @@ public class TtsController {
     public ResponseEntity<byte[]> synthesize(@RequestBody Map<String, String> body) {
         String text = body == null ? "" : body.getOrDefault("text", "");
         String selectedVoice = body == null ? "" : body.getOrDefault("voice", "");
+        String instruct = body == null ? "" : body.getOrDefault("instruct", "");
         byte[] audio = TextToSpeech.synthesizeLocal(
                 url,
                 model,
                 selectedVoice == null || selectedVoice.isBlank() ? voice : selectedVoice,
-                text);
+                text,
+                instruct);
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("audio/wav"))
                 .header("Content-Disposition", "inline; filename=\"speech.wav\"")
